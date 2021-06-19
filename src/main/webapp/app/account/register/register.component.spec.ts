@@ -41,53 +41,6 @@ describe('Component Tests', () => {
       expect(comp.doNotMatch).toBe(true);
     });
 
-    it('should update success to true after creating an account', inject(
-      [RegisterService],
-      fakeAsync((service: RegisterService) => {
-        spyOn(service, 'save').and.returnValue(of({}));
-        comp.registerForm.patchValue({
-          password: 'password',
-          confirmPassword: 'password',
-        });
-
-        comp.register();
-        tick();
-
-        expect(service.save).toHaveBeenCalledWith({
-          email: '',
-          password: 'password',
-          login: '',
-          langKey: 'es',
-        });
-        expect(comp.success).toBe(true);
-        expect(comp.errorUserExists).toBe(false);
-        expect(comp.errorEmailExists).toBe(false);
-        expect(comp.error).toBe(false);
-      })
-    ));
-
-    it('should notify of user existence upon 400/login already in use', inject(
-      [RegisterService],
-      fakeAsync((service: RegisterService) => {
-        spyOn(service, 'save').and.returnValue(
-          throwError({
-            status: 400,
-            error: { type: LOGIN_ALREADY_USED_TYPE },
-          })
-        );
-        comp.registerForm.patchValue({
-          password: 'password',
-          confirmPassword: 'password',
-        });
-
-        comp.register();
-        tick();
-
-        expect(comp.errorUserExists).toBe(true);
-        expect(comp.errorEmailExists).toBe(false);
-        expect(comp.error).toBe(false);
-      })
-    ));
 
     it('should notify of email existence upon 400/email address already in use', inject(
       [RegisterService],
